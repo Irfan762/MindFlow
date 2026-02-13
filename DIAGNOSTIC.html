@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Auth Test</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        #log {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1e1e1e;
+            color: #00ff00;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .success { color: #00ff00; }
+        .error { color: #ff4444; }
+        .info { color: #4da6ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Auth Diagnostic Tool</h1>
+        <p>Test your backend authentication directly</p>
+
+        <div class="section">
+            <h3>📝 Register New User</h3>
+            <input type="text" id="regUsername" placeholder="Username" value="john">
+            <input type="email" id="regEmail" placeholder="Email" value="john@test.com">
+            <input type="password" id="regPassword" placeholder="Password" value="test123">
+            <button onclick="testRegister()">🚀 Test Register</button>
+        </div>
+
+        <div class="section">
+            <h3>🔑 Login</h3>
+            <input type="email" id="loginEmail" placeholder="Email" value="john@test.com">
+            <input type="password" id="loginPassword" placeholder="Password" value="test123">
+            <button onclick="testLogin()">🔓 Test Login</button>
+        </div>
+
+        <div id="log"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000';
+        const log = document.getElementById('log');
+
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            log.innerHTML += `<span class="${color}">[${timestamp}] ${message}</span>\n`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        async function testRegister() {
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            addLog('🔵 Starting registration test...', 'info');
+            addLog(`📤 Sending: {username: "${username}", email: "${email}"}`, 'info');
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    addLog('✅ SUCCESS! Registration worked!', 'success');
+                    addLog(`📥 Received token: ${data.token.substring(0, 30)}...`, 'success');
+                    addLog('✨ You can now try logging in with these credentials', 'success');
+                } else {
+                    addLog(`❌ FAILED: ${data.message}`, 'error');
+                    if (data.message.includes('already exists')) {
+                        addLog('💡 TIP: Try a different email address', 'info');
+                    }
+                }
+            } catch (error) {
+                addLog(`❌ NETWORK ERROR: ${error.message}`, 'error');
+                addLog('💡 Is the backend running on port 5000?', 'error');
+            }
+        }
+
+        async function testLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            addLog('🔵 Starting login test...', 'info');
+            addLog(`📤 Sending: {email: "${email}"}`, 'info');
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    addLog('✅ SUCCESS! Login worked!', 'success');
+                    addLog(`📥 Received token: ${data.token.substring(0, 30)}...`, 'success');
+                    addLog('🎉 Authentication is working perfectly!', 'success');
+                } else {
+                    addLog(`❌ FAILED: ${data.message}`, 'error');
+                    if (data.message.includes('Invalid')) {
+                        addLog('💡 TIP: Wrong email or password', 'error');
+                        addLog('💡 Try registering first, then login', 'info');
+                    }
+                }
+            } catch (error) {
+                addLog(`❌ NETWORK ERROR: ${error.message}`, 'error');
+                addLog('💡 Is the backend running on port 5000?', 'error');
+            }
+        }
+
+        // Initial message
+        addLog('🎯 Diagnostic tool ready!', 'success');
+        addLog('📡 Backend URL: ' + API_URL, 'info');
+        addLog('👆 Click a button above to test', 'info');
+    </script>
+</body>
+</html>
