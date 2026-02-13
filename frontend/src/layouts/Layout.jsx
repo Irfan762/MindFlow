@@ -1,6 +1,7 @@
 import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { Heart, Activity, BookOpen, MessageCircle, Shield } from 'lucide-react';
+import PanicSOS from '../components/PanicSOS';
 
 const Layout = () => {
     return (
@@ -51,6 +52,9 @@ const Layout = () => {
                     </div>
                 </div>
             </footer>
+            
+            {/* Global Panic SOS Button */}
+            <PanicSOS />
         </div>
     );
 };

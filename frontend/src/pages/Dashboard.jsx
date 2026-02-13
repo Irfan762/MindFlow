@@ -59,7 +59,8 @@ const Dashboard = () => {
         { title: 'Log Mood', icon: Heart, color: 'bg-pink-500', link: '/mood' },
         { title: 'Write Journal', icon: BookOpen, color: 'bg-purple-500', link: '/journal' },
         { title: 'AI Chat', icon: MessageCircle, color: 'bg-blue-500', link: '/chat' },
-        { title: 'Coping Tools', icon: Sparkles, color: 'bg-teal-500', link: '/coping' }
+        { title: '5-Min Therapy', icon: Sparkles, color: 'bg-teal-500', link: '/therapy' },
+        { title: 'Coping Tools', icon: Sparkles, color: 'bg-orange-500', link: '/coping' }
     ];
 
     return (

@@ -35,10 +35,11 @@ const LandingPage = () => {
                             <Link to="/register" className="px-8 py-4 bg-teal-500 text-white rounded-full font-bold text-lg shadow-lg hover:bg-teal-600 hover:shadow-xl transition-all flex items-center justify-center gap-2">
                                 Start Your Journey <ArrowRight className="w-5 h-5" />
                             </Link>
-                            <Link to="/about" className="px-8 py-4 bg-white text-slate-700 rounded-full font-bold text-lg shadow-sm border border-slate-200 hover:bg-slate-50 transition-all">
-                                Learn More
+                            <Link to="/anonymous" className="px-8 py-4 bg-white text-teal-600 border-2 border-teal-500 rounded-full font-bold text-lg shadow-sm hover:bg-teal-50 transition-all">
+                                Try Anonymously 🔒
                             </Link>
                         </motion.div>
+                        <p className="text-slate-500 mt-4 text-sm">No credit card • Privacy-first • Anonymous mode available</p>
                     </div>
                 </div>
                 

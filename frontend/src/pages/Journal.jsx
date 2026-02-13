@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BookOpen, Trash2, Lock } from 'lucide-react';
+import { BookOpen, Trash2, Lock, Mic } from 'lucide-react';
 import { motion } from 'framer-motion';
+import VoiceRecorder from '../components/VoiceRecorder';
 
 const Journal = () => {
     const [entries, setEntries] = useState([]);
@@ -69,6 +70,11 @@ const Journal = () => {
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
                 <h2 className="text-xl font-bold text-slate-800 mb-4">Write New Entry</h2>
                 <form onSubmit={handleSubmit}>
+                    {/* Voice Recording */}
+                    <div className="mb-4">
+                        <VoiceRecorder onTranscript={(text) => setContent(prev => prev + ' ' + text)} />
+                    </div>
+                    
                     <textarea
                         className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none resize-none bg-slate-50 min-h-[200px]"
                         placeholder="How are you feeling today? Write your thoughts here..."

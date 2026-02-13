@@ -11,12 +11,17 @@ import MoodTracker from './pages/MoodTracker';
 import Journal from './pages/Journal';
 import CopingToolkit from './pages/CopingToolkit';
 import Chatbot from './pages/Chatbot';
+import AnonymousMode from './pages/AnonymousMode';
+import QuickTherapy from './pages/QuickTherapy';
 
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Routes>
+          {/* Public Anonymous Mode Route */}
+          <Route path="/anonymous" element={<AnonymousMode />} />
+          
           <Route element={<Layout />}>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
@@ -27,6 +32,7 @@ function App() {
             <Route path="/journal" element={<PrivateRoute><Journal /></PrivateRoute>} />
             <Route path="/coping" element={<PrivateRoute><CopingToolkit /></PrivateRoute>} />
             <Route path="/chat" element={<PrivateRoute><Chatbot /></PrivateRoute>} />
+            <Route path="/therapy" element={<PrivateRoute><QuickTherapy /></PrivateRoute>} />
           </Route>
         </Routes>
       </Router>
